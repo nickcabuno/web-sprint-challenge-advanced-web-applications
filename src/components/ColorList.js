@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Color from "./Color"
+import EditMenu from "./EditMenu"
+import { useHistory } from "react-router";
 
 const initialColor = {
   color: "",
@@ -9,6 +12,7 @@ const initialColor = {
 const ColorList = ({ colors, updateColors }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  const { push } = useHistory()
 
   const editColor = color => {
     setEditing(true);
@@ -21,7 +25,16 @@ const ColorList = ({ colors, updateColors }) => {
   };
 
   const deleteColor = color => {
+    axios
+      .delete(`http://localhost:5000/colors/`)
+      .then((res) => {
+        color.setItems(res.data);
+        push("/colors");
+      })
+      .catch((err) => console.log({ err }));
   };
+
+
 
   return (
     <div className="colors-wrap">
