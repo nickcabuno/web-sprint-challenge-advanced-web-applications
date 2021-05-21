@@ -8,6 +8,7 @@ const Login = () => {
 
   const { push } = useHistory()
   const [formValues, setFormValues] = useState(initialValues)
+  const [error, setError] = useState("")
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
 
@@ -17,18 +18,23 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    if (formValues.username !== "Lambda School" || formValues.password !== "i<3Lambd4") {
+      setError("Username or Password not valid.");
+    }
     // make a post request to retrieve a token from the api
     // when you have handled the token, navigate to the BubblePage route
-    axios
+    else{
+      axios
       .post("http://localhost:5000/api/login", formValues)
       .then((res) => {
         window.localStorage.setItem("token", res.data.payload);
         push("/bubbles")
       })
       .catch((error) => (error.message))
+    }
   };
   
-  const error = "Username or Password not valid.";
+  // const error = "Username or Password not valid.";
   //replace with error state
 
   return (
